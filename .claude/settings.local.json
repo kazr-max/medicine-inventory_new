@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(java:*)",
+      "Bash(node:*)",
+      "Bash(mkdir:*)",
+      "Bash(gradle wrapper:*)",
+      "Bash(curl:*)",
+      "Bash(npm create:*)",
+      "Bash(npm install:*)",
+      "Bash(./gradlew build:*)",
+      "Bash(npm run:*)",
+      "Bash(./gradlew compileJava:*)",
+      "Bash(rm:*)",
+      "Bash(npx vite:*)",
+      "Bash(npx:*)",
+      "Bash(npx tsc:*)",
+      "Bash(./gradlew bootRun:*)",
+      "Bash(netstat:*)",
+      "Bash(npm start:*)",
+      "Bash(taskkill:*)"
+    ]
+  }
+}

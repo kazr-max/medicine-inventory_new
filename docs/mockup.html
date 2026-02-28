@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>薬在庫管理アプリ - 画面モック</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* ===== Navigation between mock states ===== */
+    .screen-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #1a1a2e;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      padding: 8px 16px;
+      z-index: 2000;
+      flex-wrap: wrap;
+    }
+
+    .screen-nav button {
+      background: transparent;
+      color: #ccc;
+      border: 1px solid #444;
+      padding: 6px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .screen-nav button:hover {
+      background: #16213e;
+      color: #fff;
+    }
+
+    .screen-nav button.active {
+      background: #0f3460;
+      color: #fff;
+      border-color: #0f3460;
+    }
+
+    .screen-label {
+      text-align: center;
+      padding: 8px;
+      margin-top: 52px;
+      background: #e8f4f8;
+      color: #0f3460;
+      font-weight: bold;
+      font-size: 13px;
+      border-bottom: 2px solid #0f3460;
+    }
+
+    /* ===== Header ===== */
+    .header {
+      background: linear-gradient(135deg, #0f3460, #16213e);
+      color: #fff;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-icon {
+      font-size: 24px;
+    }
+
+    .user-switcher {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-switcher label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .user-switcher select {
+      padding: 6px 12px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .user-switcher select option {
+      color: #333;
+      background: #fff;
+    }
+
+    .add-user-btn {
+      padding: 4px 10px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      line-height: 1;
+    }
+
+    .add-user-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* ===== Search bar ===== */
+    .search-bar {
+      padding: 12px 20px;
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      max-width: 500px;
+    }
+
+    .search-input-wrapper input {
+      width: 100%;
+      padding: 10px 14px 10px 40px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input-wrapper input:focus {
+      border-color: #0f3460;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+      font-size: 16px;
+    }
+
+    /* ===== Medicine list ===== */
+    .list-container {
+      padding: 16px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .list-header h2 {
+      font-size: 16px;
+      color: #555;
+    }
+
+    .count-badge {
+      background: #e8f4f8;
+      color: #0f3460;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .medicine-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: box-shadow 0.2s, transform 0.1s;
+      border-left: 4px solid #4caf50;
+    }
+
+    .medicine-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-1px);
+    }
+
+    .medicine-card.warning {
+      border-left-color: #ff9800;
+    }
+
+    .medicine-card.danger {
+      border-left-color: #f44336;
+    }
+
+    .card-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .usage-badge {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .usage-badge.regular {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .card-meta {
+      font-size: 13px;
+      color: #888;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .card-actions-row {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .card-action-btn {
+      padding: 3px 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #f9f9f9;
+      cursor: pointer;
+      font-size: 12px;
+      color: #555;
+      transition: all 0.15s;
+    }
+
+    .card-action-btn:hover {
+      background: #0f3460;
+      color: #fff;
+      border-color: #0f3460;
+    }
+
+    .card-action-btn.danger:hover {
+      background: #f44336;
+      border-color: #f44336;
+    }
+
+    .card-stock {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .stock-count {
+      font-size: 22px;
+      font-weight: 700;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .stock-count.ok { color: #4caf50; }
+    .stock-count.warning { color: #ff9800; }
+    .stock-count.danger { color: #f44336; }
+
+    .stock-unit {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .stock-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stock-btn {
+      width: 32px;
+      height: 28px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #f9f9f9;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      color: #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .stock-btn:hover {
+      background: #0f3460;
+      color: #fff;
+      border-color: #0f3460;
+    }
+
+    .alert-badge {
+      display: inline-block;
+      background: #fff3e0;
+      color: #e65100;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .alert-badge.danger {
+      background: #fce4ec;
+      color: #c62828;
+    }
+
+    /* ===== FAB ===== */
+    .fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #0f3460, #16213e);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(15, 52, 96, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+      z-index: 100;
+    }
+
+    .fab:hover {
+      transform: scale(1.1);
+    }
+
+    /* ===== Modal overlay ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1500;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      animation: modalIn 0.2s ease-out;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #0f3460;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    .form-group label .required {
+      color: #f44336;
+      margin-left: 4px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #0f3460;
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex: 1;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0f3460, #16213e);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #555;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .btn-danger {
+      background: #f44336;
+      color: #fff;
+    }
+
+    .btn-danger:hover {
+      background: #d32f2f;
+    }
+
+    /* ===== Delete confirm modal ===== */
+    .confirm-modal {
+      text-align: center;
+    }
+
+    .confirm-modal .confirm-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .confirm-modal p {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .confirm-modal .medicine-name-confirm {
+      font-size: 18px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* ===== LINE notification preview ===== */
+    .line-notification {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+
+    .line-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      border-left: 4px solid #06c755;
+    }
+
+    .line-card h3 {
+      font-size: 16px;
+      color: #06c755;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .line-message {
+      background: #f5f7fa;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #333;
+    }
+
+    /* ===== Screen containers ===== */
+    .screen {
+      display: none;
+      padding-top: 52px;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #0f3460;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 16px;
+      cursor: pointer;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+      .header { flex-wrap: wrap; gap: 8px; }
+      .header h1 { font-size: 17px; }
+      .user-switcher label { font-size: 12px; }
+      .user-switcher select { font-size: 13px; padding: 4px 8px; }
+      .form-row { flex-direction: column; gap: 0; }
+      .card-meta { flex-direction: column; gap: 4px; }
+      .medicine-card { padding: 12px; }
+      .screen-nav { gap: 2px; padding: 6px 8px; }
+      .screen-nav button { padding: 5px 10px; font-size: 11px; }
+      .screen-label { margin-top: 48px; }
+      .screen { padding-top: 48px; }
+      .modal { padding: 20px; margin: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Mock State Navigation ===== -->
+  <nav class="screen-nav">
+    <button class="active" onclick="showState('list')">一覧（通常）</button>
+    <button onclick="showState('register')">一覧＋登録モーダル</button>
+    <button onclick="showState('edit')">一覧＋編集モーダル</button>
+    <button onclick="showState('delete')">一覧＋削除確認</button>
+    <button onclick="showState('adduser')">ユーザー登録</button>
+    <button onclick="showState('notification')">LINE通知</button>
+  </nav>
+
+  <!-- ======================================== -->
+  <!-- Main Screen: 一覧画面（トップ画面）        -->
+  <!-- ======================================== -->
+  <div id="screen-list" class="screen active">
+    <div class="screen-label">トップ画面: F3 在庫一覧 / F4 検索 / F5 在庫増減 / F1 登録 / F2 編集・削除</div>
+
+    <header class="header">
+      <h1><span class="header-icon">💊</span> 薬在庫管理</h1>
+      <div class="user-switcher">
+        <label>ユーザー:</label>
+        <select>
+          <option selected>お父さん</option>
+          <option>お母さん</option>
+          <option>太郎</option>
+        </select>
+        <button class="add-user-btn" title="ユーザー追加">＋</button>
+      </div>
+    </header>
+
+    <!-- F4: Search -->
+    <div class="search-bar">
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="薬名で検索...">
+      </div>
+    </div>
+
+    <!-- F3: Medicine list -->
+    <div class="list-container">
+      <div class="list-header">
+        <h2>在庫一覧</h2>
+        <span class="count-badge">全 5 件</span>
+      </div>
+
+      <!-- Card: Normal stock -->
+      <div class="medicine-card">
+        <div class="card-main">
+          <div class="card-name">ロキソニン <span class="usage-badge regular">常用</span></div>
+          <div class="card-meta">
+            <span>期限: 2027/03/15</span>
+            <span>閾値: 5個</span>
+            <span>1日: 3個</span>
+          </div>
+          <div class="card-actions-row">
+            <button class="card-action-btn" onclick="showState('edit')">✏️ 編集</button>
+            <button class="card-action-btn danger" onclick="showState('delete')">🗑️ 削除</button>
+          </div>
+        </div>
+        <div class="card-stock">
+          <div class="stock-buttons">
+            <button class="stock-btn">＋</button>
+            <button class="stock-btn">－</button>
+          </div>
+          <div>
+            <div class="stock-count ok">12</div>
+            <div class="stock-unit">個</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Warning stock -->
+      <div class="medicine-card warning">
+        <div class="card-main">
+          <div class="card-name">ビオフェルミン <span class="usage-badge regular">常用</span></div>
+          <div class="card-meta">
+            <span>期限: 2026/12/01</span>
+            <span>閾値: 10個</span>
+            <span>1日: 3個</span>
+            <span class="alert-badge">⚠ 残少</span>
+          </div>
+          <div class="card-actions-row">
+            <button class="card-action-btn" onclick="showState('edit')">✏️ 編集</button>
+            <button class="card-action-btn danger" onclick="showState('delete')">🗑️ 削除</button>
+          </div>
+        </div>
+        <div class="card-stock">
+          <div class="stock-buttons">
+            <button class="stock-btn">＋</button>
+            <button class="stock-btn">－</button>
+          </div>
+          <div>
+            <div class="stock-count warning">8</div>
+            <div class="stock-unit">個</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Danger stock -->
+      <div class="medicine-card danger">
+        <div class="card-main">
+          <div class="card-name">パブロンゴールド</div>
+          <div class="card-meta">
+            <span>期限: 2026/08/20</span>
+            <span>閾値: 3個</span>
+            <span class="alert-badge danger">🔴 要補充</span>
+          </div>
+          <div class="card-actions-row">
+            <button class="card-action-btn" onclick="showState('edit')">✏️ 編集</button>
+            <button class="card-action-btn danger" onclick="showState('delete')">🗑️ 削除</button>
+          </div>
+        </div>
+        <div class="card-stock">
+          <div class="stock-buttons">
+            <button class="stock-btn">＋</button>
+            <button class="stock-btn">－</button>
+          </div>
+          <div>
+            <div class="stock-count danger">2</div>
+            <div class="stock-unit">個</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Normal -->
+      <div class="medicine-card">
+        <div class="card-main">
+          <div class="card-name">ムヒアルファEX</div>
+          <div class="card-meta">
+            <span>期限: -</span>
+            <span>閾値: 1個</span>
+          </div>
+          <div class="card-actions-row">
+            <button class="card-action-btn" onclick="showState('edit')">✏️ 編集</button>
+            <button class="card-action-btn danger" onclick="showState('delete')">🗑️ 削除</button>
+          </div>
+        </div>
+        <div class="card-stock">
+          <div class="stock-buttons">
+            <button class="stock-btn">＋</button>
+            <button class="stock-btn">－</button>
+          </div>
+          <div>
+            <div class="stock-count ok">3</div>
+            <div class="stock-unit">個</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Warning -->
+      <div class="medicine-card warning">
+        <div class="card-main">
+          <div class="card-name">アレグラFX</div>
+          <div class="card-meta">
+            <span>期限: 2026/09/15</span>
+            <span>閾値: 5個</span>
+            <span class="alert-badge">⚠ 残少</span>
+          </div>
+          <div class="card-actions-row">
+            <button class="card-action-btn" onclick="showState('edit')">✏️ 編集</button>
+            <button class="card-action-btn danger" onclick="showState('delete')">🗑️ 削除</button>
+          </div>
+        </div>
+        <div class="card-stock">
+          <div class="stock-buttons">
+            <button class="stock-btn">＋</button>
+            <button class="stock-btn">－</button>
+          </div>
+          <div>
+            <div class="stock-count warning">4</div>
+            <div class="stock-unit">個</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAB: New registration -->
+    <button class="fab" onclick="showState('register')" title="新規登録">＋</button>
+  </div>
+
+  <!-- ======================================== -->
+  <!-- Modal: 新規登録                           -->
+  <!-- ======================================== -->
+  <div id="modal-register" class="modal-overlay" onclick="if(event.target===this)showState('list')">
+    <div class="modal">
+      <h2>💊 薬の新規登録</h2>
+
+      <div class="form-group">
+        <label>薬名<span class="required">*</span></label>
+        <input type="text" placeholder="例: ロキソニン">
+      </div>
+
+      <div class="form-group">
+        <label>種別</label>
+        <select class="form-select">
+          <option selected>常用</option>
+          <option>頓服</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>数量<span class="required">*</span></label>
+          <input type="number" placeholder="例: 10" min="0">
+          <div class="form-hint">現在の在庫数を入力</div>
+        </div>
+        <div class="form-group">
+          <label>アラート閾値<span class="required">*</span></label>
+          <input type="number" placeholder="例: 5" min="0">
+          <div class="form-hint">この数以下でLINE通知</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>1日の服用数</label>
+        <input type="number" placeholder="例: 3" min="0">
+        <div class="form-hint">毎朝8時に自動で在庫を減らします</div>
+      </div>
+
+      <div class="form-group">
+        <label>使用期限</label>
+        <input type="date">
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="showState('list')">キャンセル</button>
+        <button class="btn btn-primary" onclick="showState('list')">登録する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================== -->
+  <!-- Modal: 編集                              -->
+  <!-- ======================================== -->
+  <div id="modal-edit" class="modal-overlay" onclick="if(event.target===this)showState('list')">
+    <div class="modal">
+      <h2>✏️ 薬情報の編集</h2>
+
+      <div class="form-group">
+        <label>薬名<span class="required">*</span></label>
+        <input type="text" value="ロキソニン">
+      </div>
+
+      <div class="form-group">
+        <label>種別</label>
+        <select class="form-select">
+          <option selected>常用</option>
+          <option>頓服</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>数量<span class="required">*</span></label>
+          <input type="number" value="12" min="0">
+        </div>
+        <div class="form-group">
+          <label>アラート閾値<span class="required">*</span></label>
+          <input type="number" value="5" min="0">
+          <div class="form-hint">この数以下でLINE通知</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>1日の服用数</label>
+        <input type="number" value="3" min="0">
+        <div class="form-hint">毎朝8時に自動で在庫を減らします</div>
+      </div>
+
+      <div class="form-group">
+        <label>使用期限</label>
+        <input type="date" value="2027-03-15">
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="showState('list')">キャンセル</button>
+        <button class="btn btn-primary" onclick="showState('list')">更新する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================== -->
+  <!-- Modal: 削除確認                           -->
+  <!-- ======================================== -->
+  <div id="modal-delete" class="modal-overlay" onclick="if(event.target===this)showState('list')">
+    <div class="modal confirm-modal">
+      <div class="confirm-icon">⚠️</div>
+      <p>以下の薬を削除しますか？</p>
+      <div class="medicine-name-confirm">ロキソニン</div>
+      <p style="font-size: 13px; color: #999;">この操作は取り消せません。</p>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="showState('list')">キャンセル</button>
+        <button class="btn btn-danger" onclick="showState('list')">削除する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================== -->
+  <!-- Modal: ユーザー登録                        -->
+  <!-- ======================================== -->
+  <div id="modal-adduser" class="modal-overlay" onclick="if(event.target===this)showState('list')">
+    <div class="modal" style="max-width: 400px;">
+      <h2>👤 ユーザー登録</h2>
+
+      <div class="form-group">
+        <label>ユーザー名<span class="required">*</span></label>
+        <input type="text" placeholder="例: 田中太郎">
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="showState('list')">キャンセル</button>
+        <button class="btn btn-primary" onclick="showState('list')">登録する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================== -->
+  <!-- Screen: LINE通知イメージ                  -->
+  <!-- ======================================== -->
+  <div id="screen-notification" class="screen">
+    <div class="screen-label">F6: 在庫数アラート（LINE通知）- 通知イメージ</div>
+
+    <header class="header">
+      <h1><span class="header-icon">💊</span> 薬在庫管理</h1>
+      <div class="user-switcher">
+        <label>ユーザー:</label>
+        <select>
+          <option selected>お父さん</option>
+          <option>お母さん</option>
+          <option>太郎</option>
+        </select>
+        <button class="add-user-btn" title="ユーザー追加">＋</button>
+      </div>
+    </header>
+
+    <div class="line-notification">
+      <a class="back-link" onclick="showState('list')">← 一覧に戻る</a>
+
+      <div class="line-card">
+        <h3>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#06c755"><path d="M12 2C6.48 2 2 5.92 2 10.66c0 2.76 1.58 5.2 4.06 6.78-.14.5-.5 1.86-.58 2.14-.1.36.13.35.28.26.1-.07 1.66-1.1 2.34-1.54.62.1 1.24.14 1.9.14 5.52 0 10-3.92 10-8.78S17.52 2 12 2z"/></svg>
+          LINE通知イメージ
+        </h3>
+
+        <div class="line-message">
+          ⚠️ <strong>薬在庫アラート</strong><br><br>
+          以下の薬の在庫が少なくなっています：<br><br>
+          💊 <strong>パブロンゴールド</strong><br>
+          　残数: <span style="color: #f44336; font-weight: bold;">2個</span>（閾値: 3個）<br><br>
+          💊 <strong>アレグラFX</strong><br>
+          　残数: <span style="color: #ff9800; font-weight: bold;">4個</span>（閾値: 5個）<br><br>
+          早めの補充をお勧めします。
+        </div>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <div class="line-card">
+          <h3>通知タイミング</h3>
+          <div style="font-size: 14px; line-height: 2; color: #555;">
+            ・在庫数を減らした際に閾値以下になった場合<br>
+            ・即時にLINE Messaging APIで通知を送信<br>
+            ・通知先: 事前設定したLINEアカウント
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showState(name) {
+      // Close all modals
+      document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
+
+      // Handle screen vs modal
+      if (name === 'list') {
+        document.getElementById('screen-list').classList.add('active');
+        document.getElementById('screen-notification').classList.remove('active');
+      } else if (name === 'register') {
+        document.getElementById('screen-list').classList.add('active');
+        document.getElementById('screen-notification').classList.remove('active');
+        document.getElementById('modal-register').classList.add('show');
+      } else if (name === 'edit') {
+        document.getElementById('screen-list').classList.add('active');
+        document.getElementById('screen-notification').classList.remove('active');
+        document.getElementById('modal-edit').classList.add('show');
+      } else if (name === 'delete') {
+        document.getElementById('screen-list').classList.add('active');
+        document.getElementById('screen-notification').classList.remove('active');
+        document.getElementById('modal-delete').classList.add('show');
+      } else if (name === 'adduser') {
+        document.getElementById('screen-list').classList.add('active');
+        document.getElementById('screen-notification').classList.remove('active');
+        document.getElementById('modal-adduser').classList.add('show');
+      } else if (name === 'notification') {
+        document.getElementById('screen-list').classList.remove('active');
+        document.getElementById('screen-notification').classList.add('active');
+      }
+
+      // Update nav buttons
+      const states = ['list', 'register', 'edit', 'delete', 'adduser', 'notification'];
+      document.querySelectorAll('.screen-nav button').forEach((btn, i) => {
+        btn.classList.toggle('active', states[i] === name);
+      });
+
+      window.scrollTo(0, 0);
+    }
+  </script>
+
+</body>
+</html>

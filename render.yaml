@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: medicine-inventory-api
+    runtime: java
+    javaVersion: "17"
+    rootDir: backend
+    buildCommand: ./gradlew bootJar
+    startCommand: java -jar build/libs/medicine-inventory-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_USERNAME
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: LINE_CHANNEL_TOKEN
+        sync: false
+      - key: LINE_USER_ID
+        sync: false

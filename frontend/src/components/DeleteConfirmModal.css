@@ -1,0 +1,35 @@
+.confirm-modal {
+  text-align: center;
+}
+
+.confirm-modal .confirm-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.confirm-modal p {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.confirm-modal .medicine-name-confirm {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.confirm-modal .note {
+  font-size: 13px;
+  color: #999;
+}
+
+.btn-danger {
+  background: #f44336;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #d32f2f;
+}

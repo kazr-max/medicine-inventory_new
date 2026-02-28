@@ -1,0 +1,182 @@
+.medicine-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: box-shadow 0.2s, transform 0.1s;
+  border-left: 4px solid #4caf50;
+}
+
+.medicine-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.medicine-card.warning {
+  border-left-color: #ff9800;
+}
+
+.medicine-card.danger {
+  border-left-color: #f44336;
+}
+
+.card-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.usage-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.usage-badge.regular {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.card-meta {
+  font-size: 13px;
+  color: #888;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.card-actions-row {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.card-action-btn {
+  padding: 3px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f9f9f9;
+  cursor: pointer;
+  font-size: 12px;
+  color: #555;
+  transition: all 0.15s;
+}
+
+.card-action-btn:hover {
+  background: #0f3460;
+  color: #fff;
+  border-color: #0f3460;
+}
+
+.card-action-btn.danger:hover {
+  background: #f44336;
+  border-color: #f44336;
+}
+
+.card-stock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.stock-count {
+  font-size: 22px;
+  font-weight: 700;
+  min-width: 40px;
+  text-align: center;
+}
+
+.stock-count.ok {
+  color: #4caf50;
+}
+.stock-count.warning {
+  color: #ff9800;
+}
+.stock-count.danger {
+  color: #f44336;
+}
+
+.stock-unit {
+  font-size: 12px;
+  color: #888;
+}
+
+.stock-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stock-btn {
+  width: 32px;
+  height: 28px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f9f9f9;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.stock-btn:hover {
+  background: #0f3460;
+  color: #fff;
+  border-color: #0f3460;
+}
+
+.stock-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.stock-btn:disabled:hover {
+  background: #f9f9f9;
+  color: #555;
+  border-color: #ddd;
+}
+
+.alert-badge {
+  display: inline-block;
+  background: #fff3e0;
+  color: #e65100;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.alert-badge.danger {
+  background: #fce4ec;
+  color: #c62828;
+}
+
+@media (max-width: 600px) {
+  .card-meta {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .medicine-card {
+    padding: 12px;
+  }
+}
