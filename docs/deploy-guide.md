@@ -94,7 +94,51 @@ git push -u origin main
 
 ---
 
-## Step 5: 動作確認
+## Step 5: Render Cron Job の環境変数設定
+
+毎朝8時（JST）に常用薬を自動減算するCron Jobの設定。
+
+### 5-1. シークレット値を生成
+
+```bash
+openssl rand -hex 32
+# 例: a3f8c2e1d4b7a9f0e2c5d8b1a4f7c3e6...
+```
+
+### 5-2. Web Service（`medicine-inventory-api`）に設定
+
+1. Renderダッシュボードで `medicine-inventory-api` をクリック
+2. 左メニュー **「Environment」** → **「Add Environment Variable」**
+3. 以下を追加して **「Save Changes」**：
+
+| Key | Value |
+|---|---|
+| `SCHEDULER_SECRET` | （5-1で生成した値） |
+
+### 5-3. Cron Job（`medicine-inventory-scheduler`）に設定
+
+1. ダッシュボードで `medicine-inventory-scheduler` をクリック
+2. 左メニュー **「Environment」** → **「Add Environment Variable」**
+3. 以下を追加して **「Save Changes」**（5-2と**まったく同じ値**）：
+
+| Key | Value |
+|---|---|
+| `SCHEDULER_SECRET` | （5-1で生成した値） |
+
+### 5-4. 動作確認
+
+```bash
+curl -X POST \
+  -H "X-Scheduler-Token: <5-1で生成した値>" \
+  https://medicine-inventory-api.onrender.com/api/internal/scheduler/run
+# "OK" が返れば成功
+```
+
+Renderダッシュボードの **Logs** タブで `常用薬の自動減算開始` のログが出ることを確認する。
+
+---
+
+## Step 6: 動作確認
 
 1. VercelのURL（`https://medicine-inventory.vercel.app`）にアクセス
 2. 薬の一覧表示、登録、編集、削除が正常に動作するか確認

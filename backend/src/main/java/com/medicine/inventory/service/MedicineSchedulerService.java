@@ -6,7 +6,6 @@ import com.medicine.inventory.repository.MedicineRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,6 @@ public class MedicineSchedulerService {
     private final MedicineRepository medicineRepository;
     private final LineNotificationService lineNotificationService;
 
-    @Scheduled(cron = "0 0 8 * * *")
     @Transactional
     public void decrementDailyDose() {
         List<Medicine> medicines = medicineRepository
