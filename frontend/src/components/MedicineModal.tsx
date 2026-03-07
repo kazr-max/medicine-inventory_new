@@ -62,7 +62,7 @@ export function MedicineModal({ mode, medicine, onSubmit, onClose }: Props) {
   };
 
   return (
-    <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+    <div className="modal-overlay">
       <div className="modal">
         <h2>{mode === 'create' ? '💊 薬の新規登録' : '✏️ 薬情報の編集'}</h2>
         <form onSubmit={handleSubmit}>
@@ -129,7 +129,7 @@ export function MedicineModal({ mode, medicine, onSubmit, onClose }: Props) {
                 value={dailyDose}
                 onChange={(e) => setDailyDose(e.target.value)}
               />
-              <div className="form-hint">毎朝8時に自動で在庫を減らします</div>
+              <div className="form-hint">アプリ起動時に自動で在庫を減らします</div>
             </div>
           )}
 

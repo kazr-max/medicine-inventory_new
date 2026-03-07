@@ -26,7 +26,7 @@ export function UserModal({ onSubmit, onClose }: Props) {
   };
 
   return (
-    <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+    <div className="modal-overlay">
       <div className="modal user-modal">
         <h2>👤 ユーザー登録</h2>
         <form onSubmit={handleSubmit}>
