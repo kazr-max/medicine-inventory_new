@@ -31,3 +31,9 @@ CREATE TABLE IF NOT EXISTS medicines (
 -- インデックス
 CREATE INDEX IF NOT EXISTS idx_medicines_user_id ON medicines (user_id);
 CREATE INDEX IF NOT EXISTS idx_medicines_name ON medicines (name);
+
+-- scheduler_logテーブル（常用薬自動減算の最終実行日を管理）
+CREATE TABLE IF NOT EXISTS scheduler_log (
+    id                  BIGINT  PRIMARY KEY DEFAULT 1,
+    last_decrement_date DATE    NOT NULL
+);

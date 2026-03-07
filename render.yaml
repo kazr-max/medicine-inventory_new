@@ -19,16 +19,3 @@ services:
         sync: false
       - key: LINE_USER_ID
         sync: false
-      - key: SCHEDULER_SECRET
-        sync: false
-
-  - type: cron
-    name: medicine-inventory-scheduler
-    runtime: image
-    image:
-      url: docker.io/curlimages/curl:latest
-    schedule: "0 23 * * *"
-    startCommand: curl -sf -X POST -H "X-Scheduler-Token: ${SCHEDULER_SECRET}" https://medicine-inventory-api.onrender.com/api/internal/scheduler/run
-    envVars:
-      - key: SCHEDULER_SECRET
-        sync: false
