@@ -14,6 +14,7 @@
 |---|---|---|
 | T1 | users | ユーザー情報 |
 | T2 | medicines | 薬の基本情報・在庫情報 |
+| T3 | scheduler_log | 常用薬自動減算の最終実行日管理 |
 
 ## 3. テーブル定義
 
@@ -68,6 +69,23 @@
 | idx_medicines_user_id | user_id | ユーザーごとの薬一覧取得の高速化 |
 | idx_medicines_name | name | 薬名検索（F4）の高速化 |
 
+### T3: scheduler_log（自動減算ログ）
+
+常用薬の自動減算が最後に実行された日付を管理するテーブル。常に1レコードのみ保持する。
+
+| # | カラム名 | データ型 | NOT NULL | デフォルト | 説明 |
+|---|---|---|---|---|---|
+| 1 | id | BIGINT | YES | 1 | 主キー（常に1固定） |
+| 2 | last_decrement_date | DATE | YES | - | 最終減算実行日 |
+
+#### 制約
+
+| 制約名 | 種類 | 対象カラム | 内容 |
+|---|---|---|---|
+| scheduler_log_pkey | PRIMARY KEY | id | 主キー |
+
+---
+
 ## 4. ER図
 
 ```
@@ -98,4 +116,4 @@
 | F5: 在庫数の増減 | UPDATE medicines SET quantity = ... WHERE user_id = ? |
 | F6: 在庫数アラート | SELECT where user_id = ? AND quantity <= alert_threshold |
 | F7: ユーザー登録 | INSERT into users |
-| F8: 常用薬の自動減算 | SELECT from medicines WHERE usage_type = 'REGULAR' AND quantity > 0 AND daily_dose > 0 → UPDATE quantity |
+| F8: 常用薬の自動減算 | SELECT from scheduler_log WHERE id = 1 → UPDATE medicines SET quantity = ... → UPDATE scheduler_log SET last_decrement_date = today |
